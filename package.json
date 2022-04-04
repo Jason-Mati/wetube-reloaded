@@ -1,0 +1,30 @@
+{
+  "name": "wetube",
+  "version": "1.0.0",
+  "description": "The best way to watch a videos.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --exec babel-node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jason-Mati/wetube-reloaded.git"
+  },
+  "author": "Jason-mati",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jason-Mati/wetube-reloaded/issues"
+  },
+  "homepage": "https://github.com/Jason-Mati/wetube-reloaded#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "morgan": "^1.10.0",
+    "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.8",
+    "@babel/node": "^7.16.8",
+    "@babel/preset-env": "^7.16.11",
+    "nodemon": "^2.0.15"
+  }
+}
