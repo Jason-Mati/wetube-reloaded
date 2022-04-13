@@ -1,0 +1,11 @@
+extends base.pug
+
+block content 
+    h4 Change Title of video
+    form(method="POST")
+        input(name="title", placeholder="Video Title", value=video.title, required)
+        input(value="Save", type="submit")
+
+
+##### input 안에 name 을 안 넣어주면, req.body에서 데이터를 볼 수 없기 때문에 꼬옥~ name을 넣어줘야 함
+
