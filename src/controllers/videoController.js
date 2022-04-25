@@ -55,8 +55,8 @@ export const postEdit = async (req, res) => {
     hashtags: Video.formatHashtags(hashtags),
   });
 
-  /* await video.save();
-     위 코드가 존재할 경우, video edit 할 때, 이 위쪽에서 에러가 나는데, 원인을 파악해 봐야함 */
+  // await video.save();
+  //   위 코드가 존재할 경우, video edit 할 때, 이 위쪽에서 에러가 나는데, 원인을 파악해 봐야함 */
   return res.redirect(`/videos/${id}`);
 };
 //* redirect를 사용하여 특정 주소로 바로 이동시킴
