@@ -7,9 +7,10 @@ import res, { redirect } from "express/lib/response";
 import req from "express/lib/request";
 import { search } from "./videoController";
 
-export const getJoin = (req, res) => res.render("join", { pageTitle: "Join " });
+export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 export const postJoin = async (req, res) => {
   const { name, username, email, password, password2, location } = req.body;
+  console.log(req.body);
   const pageTitle = "Join";
   if (password !== password2) {
     return res.status(400).render("join", {
@@ -36,9 +37,9 @@ export const postJoin = async (req, res) => {
       username,
       email,
       password,
-      password2,
       location,
     });
+
     return res.redirect("/login");
   } catch (error) {
     return res.status(400).render("join", {
@@ -165,31 +166,23 @@ export const getEdit = (req, res) => {
 export const postEdit = async (req, res) => {
   const {
     session: {
-      user: { _id, email: sessionEmail, username: sessionUsername },
+      user: { _id },
     },
     body: { name, email, username, location },
   } = req;
   //위의 코드는 const id = req.session.user.id 와 같은 뜻임
 
   // 아래 코드는 변경 시도하는 username 또는 email이 기존의 다른 user의 것과 중복되지 않는지, 중복되면 에러메시지를 주는 코드 실습임
-  let searchParams = [];
-  if (username !== sessionUsername) {
-    searchParams.push(username);
+  const findUsername = await User.findOne({ username });
+  const findEmail = await User.findOne({ email });
+  if (findUsername._id !== _id || findEmail._id !== _id) {
+    return res.render("edit-profile", {
+      pageTitle: "Edit Profile",
+      errorMessage: "This username/email ia already taken",
+    });
   }
-  if (email !== sessionEmail) {
-    searchParams.push(email);
-  }
+  //위까지
 
-  if (searchParams.length > 0) {
-    const foundUser = await User.findOne({ $or: searchParams });
-    if (foundUser && foundUser.id.toString() !== _id) {
-      return res.status(400).redirect("edit-profile", {
-        pageTitle: "Edit Profile",
-        errorMessage: "This username/email is already taken",
-      });
-    }
-  }
-  //d
   const updateUser = await User.findByIdAndUpdate(
     _id,
     {
