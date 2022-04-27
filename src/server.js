@@ -32,7 +32,9 @@ app.use(
    .env 파일안의 코드는 관습적으로 모두 대문자로 입력함
 */
 app.use(localsMiddleware);
-//* localsMiddleware 가 session 보다 반드시 뒤에 와야함.
+//* localsMiddleware 가 session 보다 반드시 뒤에 와야함. (???)
+app.use("/uploads", express.static("uploads"));
+//upload 된 파일의 모든 랜덤한 주소를 express에서 인식할 수 있도록 하는 코드임
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);

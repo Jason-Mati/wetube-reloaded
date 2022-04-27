@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const videoSchema = new mongoose.Schema({
   title: { type: String, trim: true, required: true, maxLength: 80 },
+  fileUrl: { type: String, required: true },
   description: { type: String, trim: true, required: true, minLength: 20 },
   createdAt: { type: Date, required: true, default: Date.now },
   /* default: Date.now() 가 아니라 Date.now로 적는 것이 매우 중요
@@ -15,6 +16,8 @@ const videoSchema = new mongoose.Schema({
     views: { type: Number, default: 0, required: true },
     rating: { type: Number, default: 0, required: true },
   },
+  owner: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
+  /*ref 에는 어떤 모델에서 가져오는 ObjectID 인지 알 수 있게, 모델명을 적어주는 것임 */
 });
 
 videoSchema.static("formatHashtags", function (hashtags) {

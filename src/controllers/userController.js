@@ -13,6 +13,7 @@ export const postJoin = async (req, res) => {
   console.log(req.body);
   const pageTitle = "Join";
   if (password !== password2) {
+    console.log("error password");
     return res.status(400).render("join", {
       pageTitle,
       errorMessage: "This password confirmation does not match",
@@ -20,6 +21,7 @@ export const postJoin = async (req, res) => {
   }
   const exists = await User.exists({ $or: [{ username }, { email }] });
   if (exists) {
+    console.log("error exists");
     return res.status(400).render("join", {
       pageTitle,
       errorMessage: "This username or email is already taken",
@@ -42,6 +44,8 @@ export const postJoin = async (req, res) => {
 
     return res.redirect("/login");
   } catch (error) {
+    console.log("error create");
+    console.log(error);
     return res.status(400).render("join", {
       pageTitle: "Join",
       errorMessage: error._message,
@@ -166,26 +170,51 @@ export const getEdit = (req, res) => {
 export const postEdit = async (req, res) => {
   const {
     session: {
-      user: { _id },
+      user: { _id, avatarUrl },
     },
+    //위의 코드는 const _id = req.session.user._id 와 같은 뜻임
     body: { name, email, username, location },
+    file,
   } = req;
-  //위의 코드는 const id = req.session.user.id 와 같은 뜻임
+  console.log(file);
+  //req.file 을 사용할 수 있는 것은 multer 패키지 덕분이다
 
-  // 아래 코드는 변경 시도하는 username 또는 email이 기존의 다른 user의 것과 중복되지 않는지, 중복되면 에러메시지를 주는 코드 실습임
-  const findUsername = await User.findOne({ username });
-  const findEmail = await User.findOne({ email });
-  if (findUsername._id !== _id || findEmail._id !== _id) {
+  /*[예제 1] 아래 코드는 변경 시도하는 username 또는 email이 기존의 다른 user의 것과 중복되지 않는지, 중복되면 에러메시지를 주는 코드 실습예제임
+
+  const findByUsername = await User.findOne({ username });
+  const findByEmail = await User.findOne({ email });
+
+  const exists = await User.exists({
+    $or: [{ findByUsername }, { findByEmail }],
+  });
+  if (exists) {
     return res.render("edit-profile", {
       pageTitle: "Edit Profile",
       errorMessage: "This username/email ia already taken",
     });
   }
+*/
+  // [예제 2] 아래 코드는 변경 시도하는 username 또는 email이 기존의 다른 user의 것과 중복되지 않는지, 중복되면 에러메시지를 주는 코드 실습예제임
+  /*
+  const findUsername = await User.findOne({ username });
+  const findEmail = await User.findOne({ email });
+  if (
+    (findUsername !== null && findUsername._id !== _id) ||
+    findEmail._id !== _id
+  ) {
+    return res.render("edit-profile", {
+      pageTitle: "Edit Profile",
+      errorMessage: "This username/email ia already taken",
+    });
+  }
+  */
   //위까지
 
   const updateUser = await User.findByIdAndUpdate(
     _id,
     {
+      avatarUrl: file ? file.path : avatarUrl,
+      // 프로필 수정할때 파일을 업로드 하면 file.path를 avatarUrl로 하고, 파일을 따로 업로드하지 않으면 session.user.avatarUrl 을 avatarUrl로 한다는 의미
       name,
       email,
       username,
@@ -198,11 +227,57 @@ export const postEdit = async (req, res) => {
   req.session.user = updateUser;
   return res.redirect("/users/edit");
 };
+
+export const getChangePassword = (req, res) => {
+  if (req.session.user.socialOnly === true) {
+    return res.redirect("/");
+  }
+  return res.render("users/change-password", { pageTitle: "Change Password" });
+};
+export const postChangePassword = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { oldPassword, newPassword, confirmation },
+  } = req;
+  const user = await User.findById(_id);
+  const ok = await bcrypt.compare(oldPassword, user.password);
+  if (!ok) {
+    return res.status(400).render("users/change-password", {
+      pageTitle: "Change password",
+      errorMessage: "The current password is incorrect",
+    });
+  }
+  if (newPassword !== confirmation) {
+    return res.status(400).render("users/change-password", {
+      pageTitle: "Change password",
+      errorMessage: "The password does not match the confirmation",
+    });
+  }
+  if (oldPassword === newPassword) {
+    return res.status(400).render("users/change-password", {
+      pageTitle,
+      errorMessage: "The old password equals new password",
+    });
+  }
+  user.password = newPassword;
+  req.session.destroy();
+  return res.redirect("/login");
+};
+
 export const logout = (req, res) => {
   req.session.destroy();
   return res.redirect("/");
 };
-export const see = (req, res) => res.send("See User");
+export const see = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (!user) {
+    return res.status(404).render("404", { pageTitle: "User not found" });
+  }
+  return res.render("users/profile", { pageTitle: user.name, user });
+};
 
 /* KAKAO LOGIN 실습 중 */
 export const startKakaoLogin = async (req, res) => {

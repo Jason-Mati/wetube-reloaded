@@ -1,5 +1,6 @@
 import res from "express/lib/response";
 import Video from "../models/Video";
+import User from "../models/User";
 
 /* 아래는 callback 사용 예시임
 export const home = (req, res) => {
@@ -27,11 +28,13 @@ export const watch = async (req, res) => {
   const video = await Video.findById(id);
   /* 위 코드 중요. MONGOOSE SCHEMA 기능 중 findById 사용*/
   //* const id = req.params.id; 와 똑같은 코딩임 (위에 것을 ES6 라고 함)
+  const owner = await User.findById(video.owner);
+
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
   }
   {
-    return res.render("watch", { pageTitle: video.title, video });
+    return res.render("watch", { pageTitle: video.title, video, owner });
   }
 };
 export const getEdit = async (req, res) => {
@@ -66,6 +69,10 @@ export const getUpload = (req, res) => {
 };
 
 export const postUpload = async (req, res) => {
+  const {
+    user: { _id },
+  } = req.session;
+  const { path: fileUrl } = req.file;
   const { title, description, hashtags } = req.body;
   try {
     await Video.create({
@@ -78,6 +85,9 @@ export const postUpload = async (req, res) => {
       createdAt: Date.now(),
       를 넣지 않아도 되는 것임
       */
+      fileUrl,
+      //위에서 const { path: fileUrl } = req.file; 코드로 fileUrl을 정의하고 여기에서 쓸 수 있는건 ES6(따로 공부필요) 때문에 가능한 것임.
+      owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });
 
