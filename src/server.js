@@ -35,6 +35,8 @@ app.use(localsMiddleware);
 //* localsMiddleware 가 session 보다 반드시 뒤에 와야함. (???)
 app.use("/uploads", express.static("uploads"));
 //upload 된 파일의 모든 랜덤한 주소를 express에서 인식할 수 있도록 하는 코드임
+app.use("/static", express.static("assets"));
+//base.pug에서 읽을 수 있게 해줘야 함 (script ....)
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);

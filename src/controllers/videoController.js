@@ -13,7 +13,9 @@ export const home = (req, res) => {
 */
 
 export const home = async (req, res) => {
-  const videos = await Video.find({}).sort({ createdAt: "desc" });
+  const videos = await Video.find({})
+    .sort({ createdAt: "desc" })
+    .populate("owner");
   return res.render("home", { pageTitle: "Home", videos });
 };
 /* pageTitle 변수를 Home.pug 로 보내서 타이틀이 Home | Wetube 가 되게 해줌
@@ -139,7 +141,7 @@ export const search = async (req, res) => {
       title: {
         $regex: new RegExp(`${keyword}$`, "i"),
       },
-    });
+    }).populate("owner");
   }
 
   return res.render("search", { pageTitle: "Search", videos });
