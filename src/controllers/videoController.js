@@ -1,6 +1,7 @@
 import res from "express/lib/response";
 import Video from "../models/Video";
 import User from "../models/User";
+import express from "express";
 
 /* 아래는 callback 사용 예시임
 export const home = (req, res) => {
@@ -146,3 +147,16 @@ export const search = async (req, res) => {
 
   return res.render("search", { pageTitle: "Search", videos });
 };
+
+export const registerView = async (req, res) => {
+  const { id } = video.params;
+  const video = await Video.findById(id);
+  if (!video) {
+    return res.sendStatus(404);
+  }
+  video.meta.views = video.meta.views + 1;
+  await video.save();
+  return res.sendStatus(200);
+};
+// status 뒤에는 항상 render, redirect 등의 코드로 뒤의 행동을 정의하는 코드가 와야함.
+// status 제공하고 바로 연결을 끝내기 위해서는 sendStatus를 써야 함

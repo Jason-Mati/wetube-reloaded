@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const videoSchema = new mongoose.Schema({
   title: { type: String, trim: true, required: true, maxLength: 80 },
+  // trim: true 는 string의 맨 앞과 뒤에 있는 공백을 제거한 후 저장하도록 한다.
   fileUrl: { type: String, required: true },
   description: { type: String, trim: true, required: true, minLength: 20 },
   createdAt: { type: Date, required: true, default: Date.now },
