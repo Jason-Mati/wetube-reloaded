@@ -232,6 +232,7 @@ export const postEdit = async (req, res) => {
 
 export const getChangePassword = (req, res) => {
   if (req.session.user.socialOnly === true) {
+    req.flash("info", "Can't change password");
     return res.redirect("/");
   }
   return res.render("users/change-password", { pageTitle: "Change Password" });
@@ -265,11 +266,13 @@ export const postChangePassword = async (req, res) => {
   }
   user.password = newPassword;
   req.session.destroy();
+  req.flash("info", "Password Updated");
   return res.redirect("/login");
 };
 
 export const logout = (req, res) => {
-  req.session.destroy();
+  req.session.loggedIn = false;
+  req.flash("info", "Bye Bye");
   return res.redirect("/");
 };
 export const see = async (req, res) => {

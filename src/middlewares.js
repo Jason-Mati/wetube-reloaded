@@ -1,5 +1,8 @@
 import multer from "multer";
 
+//locals는 템플릿에서 사용할 수 있는 것들임.
+//flash 미들웨어 설치 및 설정 후, flash 의 에러종류와 메시지를 설정했다면,
+//템플릿에서 message.(에러의 종류) 코드를 통해 에러 메시지를 노출시킬 수 있음
 export const localsMiddleware = (req, res, next) => {
   res.locals.loggedIn = Boolean(req.session.loggedIn);
   res.locals.siteName = "Wetube";
@@ -11,6 +14,7 @@ export const protectorMiddleware = (req, res, next) => {
   if (req.session.loggedIn) {
     return next();
   } else {
+    req.flash("error", "Login First");
     return res.redirect("/login");
   }
 };
@@ -19,6 +23,8 @@ export const publicOnlyMiddleware = (req, res, next) => {
   if (!req.session.loggedIn) {
     return next();
   } else {
+    req.flash("error", "Not Authorized");
+    //express-flash를 설치해서 사용 가능하며, 메시지의 타입과 내용을 입력해주면 됨
     return res.redirect("/");
   }
 };

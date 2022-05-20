@@ -1,5 +1,4 @@
 import express from "express";
-import { all } from "express/lib/application";
 import {
   getJoin,
   postJoin,

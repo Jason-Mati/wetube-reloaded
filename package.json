@@ -4,6 +4,8 @@
   "description": "The best way to watch a videos.",
   "main": "index.js",
   "scripts": {
+    "start": "node build/init.js",
+    "build:server": "babel src -d build",
     "dev:server": "nodemon",
     "dev:assets": "webpack"
   },
@@ -18,11 +20,14 @@
   },
   "homepage": "https://github.com/Jason-Mati/wetube-reloaded#readme",
   "dependencies": {
+    "@ffmpeg/core": "^0.8.5",
+    "@ffmpeg/ffmpeg": "^0.9.7",
     "bcrypt": "^5.0.1",
     "connect-mongo": "^4.6.0",
     "cross-fetch": "^3.1.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "express-flash": "^0.0.2",
     "express-session": "^1.17.2",
     "mongoose": "^6.3.0",
     "morgan": "^1.10.0",
@@ -32,7 +37,8 @@
     "regenerator-runtime": "^0.13.9"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.8",
+    "@babel/cli": "^7.17.10",
+    "@babel/core": "^7.17.12",
     "@babel/node": "^7.16.8",
     "@babel/preset-env": "^7.16.11",
     "babel-loader": "^8.2.5",
