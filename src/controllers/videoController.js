@@ -105,8 +105,8 @@ export const postUpload = async (req, res) => {
       createdAt: Date.now(),
       를 넣지 않아도 되는 것임
       */
-      fileUrl: video[0].path,
-      thumbUrl: thumb[0].path,
+      fileUrl: video[0].location,
+      thumbUrl: thumb[0].location,
       //위에서 const { path: fileUrl } = req.file; 코드로 fileUrl을 정의하고 여기에서 쓸 수 있는건 ES6(따로 공부필요) 때문에 가능한 것임.
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),

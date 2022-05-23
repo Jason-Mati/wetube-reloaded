@@ -24,6 +24,7 @@
   "dependencies": {
     "@ffmpeg/core": "^0.8.5",
     "@ffmpeg/ffmpeg": "^0.9.7",
+    "aws-sdk": "^2.1140.0",
     "bcrypt": "^5.0.1",
     "connect-mongo": "^4.6.0",
     "cross-fetch": "^3.1.5",
@@ -34,6 +35,7 @@
     "mongoose": "^6.3.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.4",
+    "multer-s3": "^2.10.0",
     "node-fetch": "^2.6.1",
     "pug": "^3.0.2",
     "regenerator-runtime": "^0.13.9"

@@ -178,7 +178,6 @@ export const postEdit = async (req, res) => {
     body: { name, email, username, location },
     file,
   } = req;
-  console.log(file);
   //req.file 을 사용할 수 있는 것은 multer 패키지 덕분이다
 
   /*[예제 1] 아래 코드는 변경 시도하는 username 또는 email이 기존의 다른 user의 것과 중복되지 않는지, 중복되면 에러메시지를 주는 코드 실습예제임
@@ -215,7 +214,7 @@ export const postEdit = async (req, res) => {
   const updateUser = await User.findByIdAndUpdate(
     _id,
     {
-      avatarUrl: file ? file.path : avatarUrl,
+      avatarUrl: file ? file.location : avatarUrl,
       // 프로필 수정할때 파일을 업로드 하면 file.path를 avatarUrl로 하고, 파일을 따로 업로드하지 않으면 session.user.avatarUrl 을 avatarUrl로 한다는 의미
       name,
       email,

@@ -1,4 +1,21 @@
 import multer from "multer";
+import multerS3 from "multer-s3";
+import aws from "aws-sdk";
+
+const s3 = new aws.S3({
+  credentials: {
+    accessKeyId: process.env.AWS_ID,
+    secretAccessKey: process.env.AWS_SECRET,
+  },
+});
+
+const multerUploader = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: "koknitube",
+    acl: "public-read",
+  }),
+});
 
 //locals는 템플릿에서 사용할 수 있는 것들임.
 //flash 미들웨어 설치 및 설정 후, flash 의 에러종류와 메시지를 설정했다면,
@@ -32,11 +49,13 @@ export const publicOnlyMiddleware = (req, res, next) => {
 export const avatarUpload = multer({
   dest: "uploads/avatars/",
   limits: { fileSize: 3000000 },
+  storage: multerUploader,
 });
 
 export const videoUpload = multer({
   dest: "uploads/videos/",
   limits: { fileSize: 100000000 },
+  storage: multerUploader,
 });
 // https://www.npmjs.com/package/multer 문서 참고
 // edit-profile 템플릿의 enctype="multipart/form-data" 내용도 참조
