@@ -94,6 +94,8 @@ export const postUpload = async (req, res) => {
   const { video, thumb } = req.files;
   //.post(videoUpload.fields(...))에서 fields 대신 single 이 오고 하나의 file이었다면 왔다면 req.file 이어야 함
   const { title, description, hashtags } = req.body;
+  const isHeroku = process.env.NODE_ENV === "production";
+
   try {
     const newVideo = await Video.create({
       title,
@@ -105,8 +107,8 @@ export const postUpload = async (req, res) => {
       createdAt: Date.now(),
       를 넣지 않아도 되는 것임
       */
-      fileUrl: video[0].location,
-      thumbUrl: thumb[0].location,
+      fileUrl: isHeroku ? video[0].location : video[0].path,
+      thumbUrl: isHeroku ? thumb[0].location : video[0].path,
       //위에서 const { path: fileUrl } = req.file; 코드로 fileUrl을 정의하고 여기에서 쓸 수 있는건 ES6(따로 공부필요) 때문에 가능한 것임.
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),

@@ -210,11 +210,12 @@ export const postEdit = async (req, res) => {
   }
   */
   //위까지
+  const isHeroku = process.env.NODE_ENV === "production";
 
   const updateUser = await User.findByIdAndUpdate(
     _id,
     {
-      avatarUrl: file ? file.location : avatarUrl,
+      avatarUrl: file ? (isHeroku ? file.location : file.path) : avatarUrl,
       // 프로필 수정할때 파일을 업로드 하면 file.path를 avatarUrl로 하고, 파일을 따로 업로드하지 않으면 session.user.avatarUrl 을 avatarUrl로 한다는 의미
       name,
       email,
