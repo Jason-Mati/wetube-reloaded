@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node build/init.js",
+    "build": "npm run build:server && build:assets",
     "build:server": "babel src -d build",
+    "build:assets": "webpack --mode=production",
     "dev:server": "nodemon",
-    "dev:assets": "webpack"
+    "dev:assets": "webpack --mode=development -w"
   },
   "repository": {
     "type": "git",

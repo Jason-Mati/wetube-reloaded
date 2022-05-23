@@ -18,8 +18,9 @@ module.exports = {
       filename: "css/styles.css",
     }),
   ],
-  mode: "development",
-  watch: true,
+  // mode: "development",
+  // watch: true,
+  // development 단계에서만 위 두줄의 코드를 오픈해야 함.
   output: {
     filename: "js/[name].js",
     path: path.resolve(__dirname, "assets"),
