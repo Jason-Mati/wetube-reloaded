@@ -178,6 +178,7 @@ export const postEdit = async (req, res) => {
     body: { name, email, username, location },
     file,
   } = req;
+
   //req.file 을 사용할 수 있는 것은 multer 패키지 덕분이다
 
   /*[예제 1] 아래 코드는 변경 시도하는 username 또는 email이 기존의 다른 user의 것과 중복되지 않는지, 중복되면 에러메시지를 주는 코드 실습예제임
