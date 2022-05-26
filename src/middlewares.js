@@ -23,6 +23,7 @@ const s3VideoUploader = multer({
     s3: s3,
     bucket: "koknitube/videos",
     acl: "public-read",
+    contentType: multerS3.AUTO_CONTENT_TYPE,
   }),
 });
 

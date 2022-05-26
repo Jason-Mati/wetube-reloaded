@@ -9,7 +9,8 @@
     "build:server": "babel src -d build",
     "build:assets": "webpack --mode=production",
     "dev:server": "nodemon",
-    "dev:assets": "webpack --mode=development -w"
+    "dev:assets": "webpack --mode=development -w",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,10 @@
     "url": "https://github.com/Jason-Mati/wetube-reloaded/issues"
   },
   "homepage": "https://github.com/Jason-Mati/wetube-reloaded#readme",
+  "engine": {
+    "node": "17.8.0",
+    "npm": "8.5.5"
+  },
   "dependencies": {
     "@ffmpeg/core": "^0.8.5",
     "@ffmpeg/ffmpeg": "^0.9.7",
