@@ -14,3 +14,5 @@ const handleListening = () =>
   console.log(`✅ Server listening on port http://localhost:${PORT} 🚀`);
 
 app.listen(PORT, handleListening);
+
+// Procfile의 파일명은 반드시 P가 대문자이어야 함
