@@ -55,4 +55,14 @@ app.use("/users", userRouter);
 app.use("/api", apiRouter);
 app.use("/convert", express.static("node_modules/@ffmpeg/core/dist"));
 
+/*
+if(process.env.NODE_ENV === "production") {
+	app.use(express.static("client/build"));
+	
+	app.get("*", (req, res) => {
+		res.sendFile(path.resolve(__dirname, "../client", "build", "index.html"))
+	})
+}
+*/
+
 export default app;
